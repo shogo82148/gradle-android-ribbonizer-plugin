@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.github.gfx.ribbonizer'
 
 android {
     compileSdkVersion 28
