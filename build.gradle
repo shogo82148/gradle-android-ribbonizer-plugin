@@ -13,11 +13,13 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'
         classpath 'com.novoda:bintray-release:0.5.0' // https://github.com/novoda/bintray-release
+        classpath 'com.jakewharton:butterknife-gradle-plugin:10.1.0'
     }
 }
 
 allprojects {
     repositories {
+        google()
         jcenter()
     }
 }
