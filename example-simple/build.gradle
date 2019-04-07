@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'com.github.gfx.ribbonizer'
 
 android {
@@ -15,5 +17,6 @@ android {
 
 
 dependencies {
-    implementation 'com.jakewharton:butterknife:6.1.0'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 }
