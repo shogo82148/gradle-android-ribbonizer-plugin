@@ -2,14 +2,10 @@ package com.github.gfx.ribbonizer.plugin
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.api.ApplicationVariant
-import com.android.builder.model.SourceProvider
 import com.github.gfx.ribbonizer.FilterBuilder
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-import java.awt.image.BufferedImage
-import java.util.function.Consumer
-import java.util.function.Function
 import java.util.stream.Stream
 
 class RibbonizerTask extends DefaultTask {
@@ -29,7 +25,7 @@ class RibbonizerTask extends DefaultTask {
     @TaskAction
     public void run() {
         if (filterBuilders.size() == 0) {
-            return;
+            return
         }
 
         def t0 = System.currentTimeMillis()
@@ -37,17 +33,13 @@ class RibbonizerTask extends DefaultTask {
         def names = new HashSet<String>(iconNames)
         names.addAll(launcherIconNames)
 
-        variant.sourceSets.stream()
-                .flatMap(new Function<SourceProvider, Stream>() {
+        def adaptiveIcons = getAdaptiveIconNames(names)
+        names.addAll(adaptiveIcons)
 
-            @Override
-            Stream apply(SourceProvider sourceProvider) {
-                return sourceProvider.resDirectories.stream()
-            }
-        }).forEach { File resDir ->
-            if (resDir == outputDir) {
-                return
-            }
+        variant.sourceSets.stream()
+                .flatMap { sourceProvider -> sourceProvider.resDirectories.stream() }
+                .filter { resDir -> resDir != outputDir }
+                .forEach { File resDir ->
 
             names.forEach { String name ->
                 project.fileTree(
@@ -63,14 +55,7 @@ class RibbonizerTask extends DefaultTask {
                     outputFile.parentFile.mkdirs()
 
                     def ribbonizer = new Ribbonizer(inputFile, outputFile)
-                    ribbonizer.process(filterBuilders.stream()
-                            .map(new Function<FilterBuilder, Consumer<BufferedImage>>() {
-
-                        @Override
-                        Consumer<BufferedImage> apply(FilterBuilder filterBuilder) {
-                            return filterBuilder.apply(variant, inputFile)
-                        }
-                    }))
+                    ribbonizer.process filterBuilders.stream().map { filterBuilder -> filterBuilder.apply(variant, inputFile) }
                     ribbonizer.save()
                 }
             }
@@ -100,5 +85,26 @@ class RibbonizerTask extends DefaultTask {
                 .distinct()
                 .map({ name -> project.file(android.sourceSets[name].manifest.srcFile) })
                 .filter({ manifestFile -> manifestFile.exists() })
+    }
+
+    // finds adaptive icons and returns foreground resource names.
+    Set<String> getAdaptiveIconNames(HashSet<String> icons) {
+        def names = new HashSet<String>()
+        variant.sourceSets.stream()
+                .flatMap { sourceProvider -> sourceProvider.resDirectories.stream() }
+                .filter { resDir -> resDir != outputDir }
+                .forEach { resDir ->
+
+            icons.forEach { String name ->
+                project.fileTree(
+                        dir: resDir,
+                        include: Resources.resourceFilePattern(name),
+                ).filter { inputFile -> inputFile.name.endsWith(".xml") }
+                .forEach { File inputFile ->
+                    names.addAll(Resources.getAdaptiveIcons(inputFile))
+                }
+            }
+        }
+        return names
     }
 }

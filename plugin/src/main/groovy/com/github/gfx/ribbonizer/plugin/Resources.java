@@ -51,4 +51,18 @@ public class Resources {
         return unmodifiableList(icons);
 
     }
+
+    public static List<String> getAdaptiveIcons(File icon)
+            throws SAXException, ParserConfigurationException, IOException {
+        GPathResult iconXml = new XmlSlurper().parse(icon);
+        GPathResult foregroundNode = (GPathResult) iconXml.getProperty("foreground");
+        String foreground = String.valueOf(foregroundNode.getProperty("@android:drawable"));
+
+        List<String> icons = new ArrayList<>(1);
+        if (!foreground.isEmpty()) {
+            icons.add(foreground);
+        }
+        return unmodifiableList(icons);
+
+    }
 }
