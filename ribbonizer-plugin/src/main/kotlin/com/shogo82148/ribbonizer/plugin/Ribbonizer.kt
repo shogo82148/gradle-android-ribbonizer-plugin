@@ -1,6 +1,6 @@
 package com.shogo82148.ribbonizer.plugin
 
-import com.android.build.api.variant.Variant
+import com.android.build.api.variant.ApplicationVariantBuilder
 import com.android.builder.model.SourceProvider
 import com.shogo82148.ribbonizer.FilterBuilder
 import com.shogo82148.ribbonizer.resource.Resource
@@ -11,7 +11,7 @@ import java.util.function.Consumer
 class Ribbonizer (
     private val name: String,
     private val project: Project,
-    private val variant: Variant,
+    private val variant: ApplicationVariantBuilder,
     private val outputDir: File,
     private val filterBuilders: List<FilterBuilder>
 ) {

@@ -3,13 +3,13 @@
  */
 package com.shogo82148.ribbonizer.plugin
 
-import com.android.build.api.variant.AndroidComponentsExtension
-import com.android.build.api.variant.Variant
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.ApplicationVariantBuilder
 import com.shogo82148.ribbonizer.FilterBuilder
 import com.shogo82148.ribbonizer.GreenRibbonBuilder
 import org.gradle.api.Project
 import org.gradle.api.Plugin
-import org.gradle.api.Task
+import org.gradle.api.tasks.TaskProvider
 import java.io.File
 import java.util.*
 
@@ -19,45 +19,42 @@ class RibbonizerPlugin: Plugin<Project> {
         project.extensions.add(RibbonizerExtension.NAME, RibbonizerExtension::class.java)
 
         // add Robbonize Tasks
-        val android = project.extensions.findByType(AndroidComponentsExtension::class.java)
+        val androidComponents = project.extensions.findByType(ApplicationAndroidComponentsExtension::class.java)
             ?: throw Exception("Not an Android application; you forget `apply plugin: 'com.android.application`?")
         val extension = project.extensions.findByType(RibbonizerExtension::class.java)!!
 
-        val tasks = mutableListOf<Task>()
+        val tasks = mutableListOf<TaskProvider<RibbonizerTask>>()
 
-        android.beforeVariants { variant ->
-            // TODO: implement me
-//               if ((!variant.buildType.isDebuggable) &&
-//                   (!extension.forcedVariantsNames.contains(variant.name))
-//               ) {
-//                   project.logger.info("[ribbonizer] skip ${variant.name} because it is not debuggable and not forced.")
-//                   return@all
-//               }
+        androidComponents.beforeVariants { variant ->
+           if ((!variant.debuggable) &&
+               (!extension.forcedVariantsNames.contains(variant.name))
+           ) {
+               project.logger.info("[ribbonizer] skip ${variant.name} because it is not debuggable and not forced.")
+               return@beforeVariants
+           }
 
             var filterBuilders = extension.filterBuilders
             if (filterBuilders.isEmpty()) {
                 filterBuilders = listOf(GreenRibbonBuilder() as FilterBuilder)
             }
 
-//                val generatedResDir = getGeneratedResDir(project, variant)
-            // android.sourceSets.findByName(variant.name)!!.res.srcDir(generatedResDir)
+            val generatedResDir = getGeneratedResDir(project, variant)
+            val name = "${RibbonizerTask.NAME}${capitalize(variant.name)}"
+            val task = project.tasks.register(name, RibbonizerTask::class.java) {
+                it.variant = variant
+                it.outputDir = generatedResDir
+                it.iconNames = HashSet(extension.iconNames)
+                it.filterBuilders = filterBuilders
+            }
+            tasks.add(task)
 
-//                val name = "${RibbonizerTask.NAME}${capitalize(variant.name)}"
-//                val task = project.tasks.register(name, RibbonizerTask::class.java)
-//                task.variant = variant
-//                task.outputDir = generatedResDir
-//                task.iconNames = HashSet(extension.iconNames)
-//                task.filterBuilders = filterBuilders
-//                tasks.add(task)
-//
-//                val generatedResources =
-//                    project.getTasksByName("generate${capitalize(variant.name)}Resources", false)
-//                generatedResources.forEach {
-//                    it.dependsOn(task)
-//                }
-
-//            project.task(mapOf("dependsOn" to tasks), RibbonizerTask.NAME)
+            val generatedResources =
+                project.getTasksByName("generate${capitalize(variant.name)}Resources", false)
+            generatedResources.forEach {
+                it.dependsOn(task)
+            }
         }
+        project.task(mapOf("dependsOn" to tasks), RibbonizerTask.NAME)
     }
 }
 
@@ -65,6 +62,6 @@ fun capitalize(string: String): String {
     return string.substring(0, 1).uppercase(Locale.ROOT) + string.substring(1)
 }
 
-fun getGeneratedResDir(project: Project, variant: Variant): File {
+fun getGeneratedResDir(project: Project, variant: ApplicationVariantBuilder): File {
     return File(project.buildDir, "generated/ribbonizer/res/${variant.name}")
 }

@@ -1,12 +1,13 @@
 package com.shogo82148.ribbonizer.plugin
 
-import com.android.build.api.variant.Variant
+import com.android.build.api.variant.ApplicationVariantBuilder
 import com.android.build.gradle.AppExtension
 import com.shogo82148.ribbonizer.FilterBuilder
 import com.shogo82148.ribbonizer.resource.AdaptiveIcon
 import com.shogo82148.ribbonizer.resource.ImageIcon
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.util.stream.Stream
@@ -65,7 +66,7 @@ open class RibbonizerTask : DefaultTask() {
             return listOf<String>(
                 "main",
                 variant.name,
-//                variant.buildType.name,
+//                variant.buildType ?? "",
 //                variant.flavorName
             ).stream().filter {
                 it.isNotEmpty()
@@ -78,8 +79,9 @@ open class RibbonizerTask : DefaultTask() {
         }
 
     @Internal
-    lateinit var variant: Variant
+    lateinit var variant: ApplicationVariantBuilder
 
+    @get:OutputFile
     @Internal
     lateinit var outputDir: File
 
