@@ -1,6 +1,6 @@
 package com.shogo82148.ribbonizer.plugin
 
-import com.android.build.gradle.api.ApplicationVariant
+import com.android.build.api.variant.Variant
 import com.android.builder.model.SourceProvider
 import com.shogo82148.ribbonizer.FilterBuilder
 import com.shogo82148.ribbonizer.resource.Resource
@@ -11,7 +11,7 @@ import java.util.function.Consumer
 class Ribbonizer (
     private val name: String,
     private val project: Project,
-    private val variant: ApplicationVariant,
+    private val variant: Variant,
     private val outputDir: File,
     private val filterBuilders: List<FilterBuilder>
 ) {
@@ -37,22 +37,22 @@ class Ribbonizer (
 
     fun findResourceFiles(name: String): List<File> {
         val files = ArrayList<File>()
-        variant.sourceSets.stream().flatMap { sourceProvider: SourceProvider ->
-            sourceProvider.resDirectories.stream()
-        }.forEach { resDir: File ->
-            if (resDir == outputDir) {
-                return@forEach
-            }
-            project.fileTree(object :
-                LinkedHashMap<String?, Any?>() {
-                init {
-                    put("dir", resDir)
-                    put("include", Resources.resourceFilePattern(name))
-                }
-            }).forEach(Consumer { inputFile: File ->
-                files.add(inputFile)
-            })
-        }
+//        variant.sourceSets.stream().flatMap { sourceProvider: SourceProvider ->
+//            sourceProvider.resDirectories.stream()
+//        }.forEach { resDir: File ->
+//            if (resDir == outputDir) {
+//                return@forEach
+//            }
+//            project.fileTree(object :
+//                LinkedHashMap<String?, Any?>() {
+//                init {
+//                    put("dir", resDir)
+//                    put("include", Resources.resourceFilePattern(name))
+//                }
+//            }).forEach(Consumer { inputFile: File ->
+//                files.add(inputFile)
+//            })
+//        }
         return files
     }
 

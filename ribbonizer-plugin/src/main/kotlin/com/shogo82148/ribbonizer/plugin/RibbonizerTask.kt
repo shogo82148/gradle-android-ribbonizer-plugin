@@ -1,7 +1,7 @@
 package com.shogo82148.ribbonizer.plugin
 
+import com.android.build.api.variant.Variant
 import com.android.build.gradle.AppExtension
-import com.android.build.gradle.api.ApplicationVariant
 import com.shogo82148.ribbonizer.FilterBuilder
 import com.shogo82148.ribbonizer.resource.AdaptiveIcon
 import com.shogo82148.ribbonizer.resource.ImageIcon
@@ -18,24 +18,24 @@ open class RibbonizerTask : DefaultTask() {
             return
         }
         val t0 = System.currentTimeMillis()
-        val names = HashSet(iconNames)
-        names.addAll(launcherIconNames)
-        info(names.toString())
-        val ribbonizer = Ribbonizer(name, project, variant, outputDir, filterBuilders)
-        names.forEach { name: String ->
-            ribbonizer.findResourceFiles(name).forEach {
-                when (it.extension) {
-                    "xml" -> {
-                        val icon = AdaptiveIcon(ribbonizer, it)
-                        ribbonizer.process(icon)
-                    }
-                    "png" -> {
-                        val icon = ImageIcon(ribbonizer, it)
-                        ribbonizer.process(icon)
-                    }
-                }
-            }
-        }
+//        val names = HashSet(iconNames)
+//        names.addAll(launcherIconNames)
+//        info(names.toString())
+//        val ribbonizer = Ribbonizer(name, project, variant, outputDir, filterBuilders)
+//        names.forEach { name: String ->
+//            ribbonizer.findResourceFiles(name).forEach {
+//                when (it.extension) {
+//                    "xml" -> {
+//                        val icon = AdaptiveIcon(ribbonizer, it)
+//                        ribbonizer.process(icon)
+//                    }
+//                    "png" -> {
+//                        val icon = ImageIcon(ribbonizer, it)
+//                        ribbonizer.process(icon)
+//                    }
+//                }
+//            }
+//        }
         info("task finished in " + (System.currentTimeMillis() - t0) + "ms")
     }
 
@@ -65,8 +65,8 @@ open class RibbonizerTask : DefaultTask() {
             return listOf<String>(
                 "main",
                 variant.name,
-                variant.buildType.name,
-                variant.flavorName
+//                variant.buildType.name,
+//                variant.flavorName
             ).stream().filter {
                 it.isNotEmpty()
             }.distinct().map {
@@ -78,7 +78,7 @@ open class RibbonizerTask : DefaultTask() {
         }
 
     @Internal
-    lateinit var variant: ApplicationVariant
+    lateinit var variant: Variant
 
     @Internal
     lateinit var outputDir: File

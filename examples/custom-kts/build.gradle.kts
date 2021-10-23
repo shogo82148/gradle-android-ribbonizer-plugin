@@ -77,11 +77,11 @@ ribbonizer {
                 val filter = customColorRibbonFilter(variant, iconFile, "#00C89C")
                 // Finer control of the label text can be achieved by setting it manually, or set to
                 // null for an unlabelled ribbon. The default is to use the flavor name.
-                filter.label = "QA" + variant.versionCode
+                filter.label = "QA" // + variant.versionCode // TODO: fix me
                 filter.largeRibbon = (iconFile.name == "ic_launcher.png")
                 filter
             }
-            variant.buildType.name == "debug" -> {
+            variant.buildType == "debug" -> {
                 if (variant.flavorName == "production") {
                     // Particular configurations can be skipped by returning no filters
                     null

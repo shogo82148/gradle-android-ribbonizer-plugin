@@ -91,7 +91,7 @@ publishing {
 }
 
 // comes from https://github.com/runningcode/gradle-doctor/blob/0e78bc8f304007bb0def37f72d6416947e58379a/doctor-plugin/build.gradle.kts#L115-L136
-fun org.gradle.api.publish.maven.MavenPom.configureForRibbonizer(pluginName: String) {
+fun MavenPom.configureForRibbonizer(pluginName: String) {
     name.set(pluginName)
     description.set("Modifies launcher icons of Android apps on debug build")
     url.set("https://github.com/shogo82148/gradle-android-ribbonizer-plugin")
