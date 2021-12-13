@@ -79,7 +79,7 @@ open class RibbonizerTask : DefaultTask() {
         }
 
     @Internal
-    lateinit var variant: ApplicationVariantBuilder
+    lateinit var variant: Variant
 
     @get:OutputFile
     @Internal

@@ -11,7 +11,7 @@ import java.util.function.Consumer
 class Ribbonizer (
     private val name: String,
     private val project: Project,
-    private val variant: ApplicationVariantBuilder,
+    private val variant: Variant,
     private val outputDir: File,
     private val filterBuilders: List<FilterBuilder>
 ) {

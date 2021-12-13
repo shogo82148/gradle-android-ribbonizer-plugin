@@ -1,6 +1,5 @@
 package com.shogo82148.ribbonizer.plugin
 
-import com.android.build.api.variant.ApplicationVariantBuilder
 import com.shogo82148.ribbonizer.*
 import com.shogo82148.ribbonizer.filter.ColorRibbonFilter
 import com.shogo82148.ribbonizer.filter.GrayScaleFilter
@@ -8,6 +7,7 @@ import com.shogo82148.ribbonizer.resource.Resource
 import java.io.File
 import java.util.function.Consumer
 
+@Suppress("unused")
 open class RibbonizerExtension {
     private var _iconNames: MutableSet<String> = HashSet()
 
@@ -56,9 +56,9 @@ open class RibbonizerExtension {
         _filterBuilders = ArrayList(filterBuilders)
     }
 
-    fun builder(filterBuilder: (ApplicationVariantBuilder, File) -> Consumer<Resource>?) {
+    fun builder(filterBuilder: (Variant, File) -> Consumer<Resource>?) {
         val fb = object: FilterBuilder{
-            override fun apply(variant: ApplicationVariantBuilder, file: File): Consumer<Resource>? {
+            override fun apply(variant: Variant, file: File): Consumer<Resource>? {
                 return filterBuilder(variant, file)
             }
         }
@@ -68,24 +68,24 @@ open class RibbonizerExtension {
 
     // utilities
 
-    fun grayScaleFilter(variant: ApplicationVariantBuilder, iconFile: File): GrayScaleFilter {
+    fun grayScaleFilter(variant: Variant, iconFile: File): GrayScaleFilter {
         return GrayScaleBuilder().apply(variant, iconFile) as GrayScaleFilter
     }
 
-    fun grayRibbonFilter(variant: ApplicationVariantBuilder, iconFile: File): ColorRibbonFilter {
+    fun grayRibbonFilter(variant: Variant, iconFile: File): ColorRibbonFilter {
         return GrayRibbonBuilder().apply(variant, iconFile) as ColorRibbonFilter
     }
 
-    fun yellowRibbonFilter(variant: ApplicationVariantBuilder, iconFile: File): ColorRibbonFilter {
+    fun yellowRibbonFilter(variant: Variant, iconFile: File): ColorRibbonFilter {
         return YellowRibbonBuilder().apply(variant, iconFile) as ColorRibbonFilter
     }
 
-    fun greenRibbonFilter(variant: ApplicationVariantBuilder, iconFile: File): ColorRibbonFilter {
+    fun greenRibbonFilter(variant: Variant, iconFile: File): ColorRibbonFilter {
         return GreenRibbonBuilder().apply(variant, iconFile) as ColorRibbonFilter
     }
 
     fun customColorRibbonFilter(
-        variant: ApplicationVariantBuilder,
+        variant: Variant,
         iconFile: File,
         nm: String
     ): ColorRibbonFilter {

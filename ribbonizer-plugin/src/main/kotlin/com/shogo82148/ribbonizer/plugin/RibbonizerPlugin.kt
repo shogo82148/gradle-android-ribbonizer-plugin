@@ -4,7 +4,8 @@
 package com.shogo82148.ribbonizer.plugin
 
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.android.build.api.variant.ApplicationVariantBuilder
+import com.android.build.api.variant.ApplicationVariant
+import com.android.build.api.variant.VariantOutputConfiguration.OutputType
 import com.shogo82148.ribbonizer.FilterBuilder
 import com.shogo82148.ribbonizer.GreenRibbonBuilder
 import org.gradle.api.Project
@@ -25,23 +26,40 @@ class RibbonizerPlugin: Plugin<Project> {
 
         val tasks = mutableListOf<TaskProvider<RibbonizerTask>>()
 
+        // collect information about variant beforeVariants.
+        val objects = project.objects
         androidComponents.beforeVariants { variant ->
-           if ((!variant.debuggable) &&
-               (!extension.forcedVariantsNames.contains(variant.name))
-           ) {
+            val variantExtension = objects.newInstance(VariantExtension::class.java)
+            variantExtension.debuggable.set(variant.debuggable)
+            variant.registerExtension(VariantExtension::class.java, variantExtension)
+        }
+
+        androidComponents.onVariants { variant ->
+            val debuggable = variant.getExtension(VariantExtension::class.java)?.debuggable?.get() ?: true
+            if (!debuggable && !extension.forcedVariantsNames.contains(variant.name)) {
                project.logger.info("[ribbonizer] skip ${variant.name} because it is not debuggable and not forced.")
-               return@beforeVariants
-           }
+               return@onVariants
+            }
 
             var filterBuilders = extension.filterBuilders
             if (filterBuilders.isEmpty()) {
                 filterBuilders = listOf(GreenRibbonBuilder() as FilterBuilder)
             }
 
+            val mainOutput = variant.outputs.single { it.outputType == OutputType.SINGLE }
+            val myVariant = Variant(
+                debuggable = debuggable,
+                name = variant.name,
+                buildType = variant.buildType ?: "",
+                versionCode = mainOutput.versionCode.get() ?: 0,
+                versionName = mainOutput.versionName.get() ?: "",
+                flavorName = variant.flavorName ?: ""
+            )
+
             val generatedResDir = getGeneratedResDir(project, variant)
             val name = "${RibbonizerTask.NAME}${capitalize(variant.name)}"
             val task = project.tasks.register(name, RibbonizerTask::class.java) {
-                it.variant = variant
+                it.variant = myVariant
                 it.outputDir = generatedResDir
                 it.iconNames = HashSet(extension.iconNames)
                 it.filterBuilders = filterBuilders
@@ -62,6 +80,6 @@ fun capitalize(string: String): String {
     return string.substring(0, 1).uppercase(Locale.ROOT) + string.substring(1)
 }
 
-fun getGeneratedResDir(project: Project, variant: ApplicationVariantBuilder): File {
+fun getGeneratedResDir(project: Project, variant: ApplicationVariant): File {
     return File(project.buildDir, "generated/ribbonizer/res/${variant.name}")
 }
