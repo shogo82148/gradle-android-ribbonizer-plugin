@@ -1,7 +1,6 @@
 package com.shogo82148.ribbonizer.plugin
 
-// Variant is used from Gradle DSL.
-@Suppress("unused")
+@Suppress("unused") // The fields of the Variant are used from Gradle DSL.
 class Variant(
     val name: String,
     val debuggable: Boolean,
