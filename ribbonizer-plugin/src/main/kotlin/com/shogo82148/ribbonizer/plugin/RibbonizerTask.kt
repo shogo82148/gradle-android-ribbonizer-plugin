@@ -82,7 +82,6 @@ open class RibbonizerTask : DefaultTask() {
     lateinit var variant: Variant
 
     @get:OutputFile
-    @Internal
     lateinit var outputDir: File
 
     @Internal
