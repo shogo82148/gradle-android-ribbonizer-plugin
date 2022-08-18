@@ -104,7 +104,7 @@ fun MavenPom.configureForRibbonizer(pluginName: String) {
     developers {
         developer {
             id.set("shogo82148")
-            name.set("Ichinose Shogo")
+            name.set("ICHINOSE Shogo")
             email.set("shogo82148@gmail.com")
         }
     }
