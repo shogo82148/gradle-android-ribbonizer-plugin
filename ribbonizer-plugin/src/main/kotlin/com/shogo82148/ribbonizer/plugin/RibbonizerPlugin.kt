@@ -59,16 +59,17 @@ class RibbonizerPlugin: Plugin<Project> {
                 flavorName = variant.flavorName ?: ""
             )
 
+            val generatedResDir = getGeneratedResDir(project, variant)
             val capitalizedName = capitalize(variant.name)
             val name = "${RibbonizerTask.NAME}${capitalizedName}"
             val task = project.tasks.register(name, RibbonizerTask::class.java) {
                 it.manifest.set(variant.artifacts.get(SingleArtifact.MERGED_MANIFEST))
                 it.assets.set(variant.sources.assets?.all)
+                it.outputDir.set(generatedResDir)
                 it.variant.set(myVariant)
                 it.iconNames.set(extension.iconNames)
                 it.filterBuilders.set(filterBuilders)
             }
-            variant.sources.assets?.addGeneratedSourceDirectory(task, RibbonizerTask::outputDir)
             tasks.add(task)
 
             val generatedResources =

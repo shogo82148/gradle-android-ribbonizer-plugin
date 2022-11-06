@@ -18,29 +18,30 @@ abstract class RibbonizerTask : DefaultTask() {
     @ExperimentalStdlibApi
     @TaskAction
     fun run() {
-        info("OUTPUT: ${outputDir.get().asFile.path} \uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A")
-        if (filterBuilders.get().isEmpty()) {
-            return
-        }
-        val t0 = System.currentTimeMillis()
-        val names = HashSet(iconNames.get())
-        names.addAll(launcherIconNames)
-        val ribbonizer = Ribbonizer(name, project, variant.get(), outputDir.get().asFile, filterBuilders.get())
-        names.forEach { name: String ->
-            ribbonizer.findResourceFiles(name).forEach {
-                when (it.extension) {
-                    "xml" -> {
-                        val icon = AdaptiveIcon(ribbonizer, it)
-                        ribbonizer.process(icon)
-                    }
-                    "png" -> {
-                        val icon = ImageIcon(ribbonizer, it)
-                        ribbonizer.process(icon)
-                    }
-                }
-            }
-        }
-        info("task finished in " + (System.currentTimeMillis() - t0) + "ms")
+        info("\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A")
+        info(outputDir.get().toString())
+//        if (filterBuilders.get().isEmpty()) {
+//            return
+//        }
+//        val t0 = System.currentTimeMillis()
+//        val names = HashSet(iconNames.get())
+//        names.addAll(launcherIconNames)
+//        val ribbonizer = Ribbonizer(name, project, variant.get(), outputDir.get().asFile, filterBuilders.get())
+//        names.forEach { name: String ->
+//            ribbonizer.findResourceFiles(name).forEach {
+//                when (it.extension) {
+//                    "xml" -> {
+//                        val icon = AdaptiveIcon(ribbonizer, it)
+//                        ribbonizer.process(icon)
+//                    }
+//                    "png" -> {
+//                        val icon = ImageIcon(ribbonizer, it)
+//                        ribbonizer.process(icon)
+//                    }
+//                }
+//            }
+//        }
+//        info("task finished in " + (System.currentTimeMillis() - t0) + "ms")
     }
 
     private fun info(message: String) {
