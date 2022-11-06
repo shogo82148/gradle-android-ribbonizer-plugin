@@ -64,7 +64,7 @@ class RibbonizerPlugin: Plugin<Project> {
             val name = "${RibbonizerTask.NAME}${capitalizedName}"
             val task = project.tasks.register(name, RibbonizerTask::class.java) {
                 it.manifest.set(variant.artifacts.get(SingleArtifact.MERGED_MANIFEST))
-                it.assets.set(variant.sources.assets?.all)
+                it.res.set(variant.sources.res?.all)
                 it.outputDir.set(generatedResDir)
                 it.variant.set(myVariant)
                 it.iconNames.set(extension.iconNames)

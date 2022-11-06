@@ -18,17 +18,19 @@ abstract class RibbonizerTask : DefaultTask() {
     @ExperimentalStdlibApi
     @TaskAction
     fun run() {
+
         info("\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A")
-        info(outputDir.get().toString())
-//        if (filterBuilders.get().isEmpty()) {
-//            return
-//        }
-//        val t0 = System.currentTimeMillis()
-//        val names = HashSet(iconNames.get())
-//        names.addAll(launcherIconNames)
-//        val ribbonizer = Ribbonizer(name, project, variant.get(), outputDir.get().asFile, filterBuilders.get())
-//        names.forEach { name: String ->
-//            ribbonizer.findResourceFiles(name).forEach {
+        if (filterBuilders.get().isEmpty()) {
+            return
+        }
+        val t0 = System.currentTimeMillis()
+        val names = HashSet(iconNames.get())
+        names.addAll(launcherIconNames)
+        info(names.toString())
+        val ribbonizer = Ribbonizer(name, project, variant.get(), res.get(), outputDir.get().asFile, filterBuilders.get())
+        names.forEach { name: String ->
+            ribbonizer.findResourceFiles(name).forEach {
+                info(it.path)
 //                when (it.extension) {
 //                    "xml" -> {
 //                        val icon = AdaptiveIcon(ribbonizer, it)
@@ -39,9 +41,9 @@ abstract class RibbonizerTask : DefaultTask() {
 //                        ribbonizer.process(icon)
 //                    }
 //                }
-//            }
-//        }
-//        info("task finished in " + (System.currentTimeMillis() - t0) + "ms")
+            }
+        }
+        info("task finished in " + (System.currentTimeMillis() - t0) + "ms")
     }
 
     private fun info(message: String) {
@@ -66,7 +68,7 @@ abstract class RibbonizerTask : DefaultTask() {
     abstract val manifest: RegularFileProperty
 
     @get:InputFiles
-    abstract val assets: ListProperty<Collection<Directory>>
+    abstract val res: ListProperty<Collection<Directory>>
 
     @get:OutputFile
     abstract val outputDir: DirectoryProperty
