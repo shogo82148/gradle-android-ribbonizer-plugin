@@ -15,8 +15,10 @@ import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.*
 
 abstract class RibbonizerTask : DefaultTask() {
+    @ExperimentalStdlibApi
     @TaskAction
     fun run() {
+        info("OUTPUT: ${outputDir.get().asFile.path} \uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A\uD83D\uDC7A")
         if (filterBuilders.get().isEmpty()) {
             return
         }
@@ -63,7 +65,7 @@ abstract class RibbonizerTask : DefaultTask() {
     abstract val manifest: RegularFileProperty
 
     @get:InputFiles
-    abstract val assets: ListProperty<Directory>
+    abstract val assets: ListProperty<Collection<Directory>>
 
     @get:OutputFile
     abstract val outputDir: DirectoryProperty

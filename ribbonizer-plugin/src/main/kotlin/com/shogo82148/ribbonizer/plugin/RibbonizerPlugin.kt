@@ -14,6 +14,7 @@ import java.io.File
 import java.util.Locale
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.Directory
 import org.gradle.api.tasks.TaskProvider
 
 class RibbonizerPlugin: Plugin<Project> {
@@ -58,17 +59,16 @@ class RibbonizerPlugin: Plugin<Project> {
                 flavorName = variant.flavorName ?: ""
             )
 
-            val generatedResDir = getGeneratedResDir(project, variant)
             val capitalizedName = capitalize(variant.name)
             val name = "${RibbonizerTask.NAME}${capitalizedName}"
             val task = project.tasks.register(name, RibbonizerTask::class.java) {
                 it.manifest.set(variant.artifacts.get(SingleArtifact.MERGED_MANIFEST))
-                it.assets.set(variant.sources.)
+                it.assets.set(variant.sources.assets?.all)
                 it.variant.set(myVariant)
-                it.outputDir.set(generatedResDir)
                 it.iconNames.set(extension.iconNames)
                 it.filterBuilders.set(filterBuilders)
             }
+            variant.sources.assets?.addGeneratedSourceDirectory(task, RibbonizerTask::outputDir)
             tasks.add(task)
 
             val generatedResources =
