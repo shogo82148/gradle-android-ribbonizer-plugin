@@ -3,7 +3,6 @@
  */
 package com.shogo82148.ribbonizer.plugin
 
-import com.android.build.api.artifact.MultipleArtifact
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.ApplicationVariant
@@ -11,10 +10,8 @@ import com.android.build.api.variant.VariantOutputConfiguration.OutputType
 import com.shogo82148.ribbonizer.FilterBuilder
 import com.shogo82148.ribbonizer.GreenRibbonBuilder
 import java.io.File
-import java.util.Locale
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.file.Directory
 import org.gradle.api.tasks.TaskProvider
 
 class RibbonizerPlugin: Plugin<Project> {
@@ -64,7 +61,7 @@ class RibbonizerPlugin: Plugin<Project> {
             val name = "${RibbonizerTask.NAME}${capitalizedName}"
             val task = project.tasks.register(name, RibbonizerTask::class.java) {
                 it.manifest.set(variant.artifacts.get(SingleArtifact.MERGED_MANIFEST))
-                it.res.set(variant.sources.res?.all)
+                variant.sources.res?.all?.let { it1 -> it.res.set(it1) }
                 it.outputDir.set(generatedResDir)
                 it.variant.set(myVariant)
                 it.iconNames.set(extension.iconNames)

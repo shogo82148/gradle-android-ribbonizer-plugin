@@ -1,12 +1,8 @@
 package com.shogo82148.ribbonizer.plugin
 
-import com.android.build.api.variant.ApplicationVariantBuilder
-import com.android.build.gradle.AppExtension
 import com.shogo82148.ribbonizer.FilterBuilder
 import com.shogo82148.ribbonizer.resource.AdaptiveIcon
 import com.shogo82148.ribbonizer.resource.ImageIcon
-import java.io.File
-import java.util.stream.Stream
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.*
 import org.gradle.api.provider.ListProperty

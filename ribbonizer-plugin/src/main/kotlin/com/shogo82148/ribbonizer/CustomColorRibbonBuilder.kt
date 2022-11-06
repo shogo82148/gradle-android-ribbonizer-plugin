@@ -1,6 +1,5 @@
 package com.shogo82148.ribbonizer
 
-import com.android.build.api.variant.ApplicationVariantBuilder
 import com.shogo82148.ribbonizer.filter.ColorRibbonFilter
 import com.shogo82148.ribbonizer.plugin.Variant
 import com.shogo82148.ribbonizer.resource.Resource
