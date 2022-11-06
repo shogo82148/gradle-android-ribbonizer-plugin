@@ -3,16 +3,18 @@
  */
 package com.shogo82148.ribbonizer.plugin
 
+import com.android.build.api.artifact.MultipleArtifact
+import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.api.variant.ApplicationVariant
 import com.android.build.api.variant.VariantOutputConfiguration.OutputType
 import com.shogo82148.ribbonizer.FilterBuilder
 import com.shogo82148.ribbonizer.GreenRibbonBuilder
-import org.gradle.api.Project
-import org.gradle.api.Plugin
-import org.gradle.api.tasks.TaskProvider
 import java.io.File
-import java.util.*
+import java.util.Locale
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.api.tasks.TaskProvider
 
 class RibbonizerPlugin: Plugin<Project> {
     override fun apply(project: Project) {
@@ -57,12 +59,15 @@ class RibbonizerPlugin: Plugin<Project> {
             )
 
             val generatedResDir = getGeneratedResDir(project, variant)
-            val name = "${RibbonizerTask.NAME}${capitalize(variant.name)}"
+            val capitalizedName = capitalize(variant.name)
+            val name = "${RibbonizerTask.NAME}${capitalizedName}"
             val task = project.tasks.register(name, RibbonizerTask::class.java) {
-                it.variant = myVariant
-                it.outputDir = generatedResDir
-                it.iconNames = HashSet(extension.iconNames)
-                it.filterBuilders = filterBuilders
+                it.manifest.set(variant.artifacts.get(SingleArtifact.MERGED_MANIFEST))
+                it.assets.set(variant.sources.)
+                it.variant.set(myVariant)
+                it.outputDir.set(generatedResDir)
+                it.iconNames.set(extension.iconNames)
+                it.filterBuilders.set(filterBuilders)
             }
             tasks.add(task)
 
@@ -77,7 +82,9 @@ class RibbonizerPlugin: Plugin<Project> {
 }
 
 fun capitalize(string: String): String {
-    return string.substring(0, 1).uppercase(Locale.ROOT) + string.substring(1)
+    return string.replaceFirstChar {
+        it.uppercase()
+    }
 }
 
 fun getGeneratedResDir(project: Project, variant: ApplicationVariant): File {
