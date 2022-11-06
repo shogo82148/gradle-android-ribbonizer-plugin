@@ -44,29 +44,12 @@ class Ribbonizer (
             val filename = pair[1]
             findResType(res, baseResType).forEach { dir ->
                 dir.listFiles()?.forEach { file ->
-                    val filenamePair = file.name.split(".", limit=2)
-                    if (filenamePair[0] == filename) {
+                    if (file.nameWithoutExtension == filename) {
                         files.add(file)
                     }
                 }
             }
         }
-//        variant.sourceSets.stream().flatMap { sourceProvider: SourceProvider ->
-//            sourceProvider.resDirectories.stream()
-//        }.forEach { resDir: File ->
-//            if (resDir == outputDir) {
-//                return@forEach
-//            }
-//            project.fileTree(object :
-//                LinkedHashMap<String?, Any?>() {
-//                init {
-//                    put("dir", resDir)
-//                    put("include", Resources.resourceFilePattern(name))
-//                }
-//            }).forEach(Consumer { inputFile: File ->
-//                files.add(inputFile)
-//            })
-//        }
         return files
     }
 
