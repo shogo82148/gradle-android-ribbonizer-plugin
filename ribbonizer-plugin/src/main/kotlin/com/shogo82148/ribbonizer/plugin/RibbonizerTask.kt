@@ -30,17 +30,17 @@ abstract class RibbonizerTask : DefaultTask() {
         val ribbonizer = Ribbonizer(name, project, variant.get(), res.get(), outputDir.get().asFile, filterBuilders.get())
         names.forEach { name: String ->
             ribbonizer.findResourceFiles(name).forEach {
-                info(it.path)
-//                when (it.extension) {
-//                    "xml" -> {
-//                        val icon = AdaptiveIcon(ribbonizer, it)
-//                        ribbonizer.process(icon)
-//                    }
-//                    "png" -> {
-//                        val icon = ImageIcon(ribbonizer, it)
-//                        ribbonizer.process(icon)
-//                    }
-//                }
+                info("processing ${it.path}")
+                when (it.extension) {
+                    "xml" -> {
+                        val icon = AdaptiveIcon(ribbonizer, it)
+                        ribbonizer.process(icon)
+                    }
+                    "png" -> {
+                        val icon = ImageIcon(ribbonizer, it)
+                        ribbonizer.process(icon)
+                    }
+                }
             }
         }
         info("task finished in " + (System.currentTimeMillis() - t0) + "ms")
