@@ -25,8 +25,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
-        classpath 'com.shogo82148.ribbonizer:ribbonizer-plugin:8.0.0'
+        classpath 'com.android.tools.build:gradle:8.1.2'
+        classpath 'com.shogo82148.ribbonizer:ribbonizer-plugin:8.1.0'
     }
 }
 ```
@@ -127,8 +127,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.0.2")
-        classpath("com.shogo82148.ribbonizer:ribbonizer-plugin:8.0.0")
+        classpath("com.android.tools.build:gradle:8.1.2")
+        classpath("com.shogo82148.ribbonizer:ribbonizer-plugin:8.1.0")
     }
 }
 ```

@@ -1,5 +1,9 @@
 # The revision history of android-ribbonizer-plugin
 
+## v8.1.0 2023/10/10
+
+- Make compatible with Android Gradle Plugin 8.1
+
 ## v8.0.0 2023/10/10
 
 - Make compatible with Android Gradle Plugin 8.0
