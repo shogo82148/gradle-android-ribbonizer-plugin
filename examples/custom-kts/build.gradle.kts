@@ -6,7 +6,6 @@ plugins {
 
 android {
     compileSdk = 33
-    buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "com.shogo82148.ribbonizer.example"
