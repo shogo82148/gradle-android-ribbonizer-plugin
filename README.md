@@ -25,8 +25,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
-        classpath 'com.shogo82148.ribbonizer:ribbonizer-plugin:3.1.0'
+        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.shogo82148.ribbonizer:ribbonizer-plugin:8.0.0'
     }
 }
 ```
@@ -127,8 +127,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.3")
-        classpath("com.shogo82148.ribbonizer:ribbonizer-plugin:3.1.0")
+        classpath("com.android.tools.build:gradle:8.0.2")
+        classpath("com.shogo82148.ribbonizer:ribbonizer-plugin:8.0.0")
     }
 }
 ```
@@ -221,6 +221,16 @@ ribbonizer {
 }
 ```
 
+## Versioning changes (October 2023)
+
+We are updating the version numbering for Ribbonizer plugin for Android to more closely match the Android Gradle plugin (AGP).
+
+Here are the notable changes:
+
+- Ribbonizer plugin will now use semantic versioning, and breaking changes will be targeted for major releases.
+- There will be one major version of Ribbonizer plugin released per year, aligned with the AGP major release.
+- The release after Ribbonizer plugin 3.1.1 will be version 8.0 and will require an upgrade to AGP version 8.0. Every major release of AGP will require a major version upgrade in the underlying AGP.
+
 ## Project Structure
 
 ```
@@ -245,7 +255,7 @@ and run `make publish`.
 make publish # upload artifacts to Maven Central
 ```
 
-## Author And License
+## Author and License
 
 Copyright (c) 2015 FUJI Goro (gfx).
 
