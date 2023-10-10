@@ -42,7 +42,7 @@ dependencies {
 
 
 group = "com.shogo82148.ribbonizer"
-version = "3.1.1"
+version = "8.0.0"
 
 java {
     withJavadocJar()
