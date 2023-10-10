@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = 33
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "com.shogo82148.ribbonizer.example"
         minSdk = 30
-        targetSdk = 30
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -59,6 +59,7 @@ android {
             dimension = "flavor"
         }
     }
+    namespace = "com.shogo82148.ribbonizer.example"
 }
 
 ribbonizer {
@@ -81,7 +82,7 @@ ribbonizer {
                 filter.largeRibbon = (iconFile.name == "ic_launcher.png")
                 filter
             }
-            variant.buildType.name == "debug" -> {
+            variant.buildType == "debug" -> {
                 if (variant.flavorName == "production") {
                     // Particular configurations can be skipped by returning no filters
                     null

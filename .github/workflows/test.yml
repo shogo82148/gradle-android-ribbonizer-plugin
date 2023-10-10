@@ -14,10 +14,8 @@ jobs:
           - zulu
           - adopt
         java:
-          - "11"
           - "17"
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
 

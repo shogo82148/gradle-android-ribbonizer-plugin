@@ -31,7 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // Use Android Gradle plugin
-    implementation("com.android.tools.build:gradle:7.3.1")
+    implementation("com.android.tools.build:gradle:8.0.2")
 
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
@@ -50,7 +50,7 @@ java {
 }
 
 tasks.compileJava {
-    options.release.set(8)
+    options.release.set(17)
 }
 
 publishing {
@@ -104,7 +104,7 @@ fun org.gradle.api.publish.maven.MavenPom.configureForRibbonizer(pluginName: Str
     developers {
         developer {
             id.set("shogo82148")
-            name.set("Ichinose Shogo")
+            name.set("ICHINOSE Shogo")
             email.set("shogo82148@gmail.com")
         }
     }
